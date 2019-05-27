@@ -8,8 +8,8 @@ players = data.frame(
 
 # * Functions ----
 
-#' bbref_positional_estimates
-#' @name bbref_positional_estimates
+#' bbref_positional_estimates_one_player
+#' @name bbref_positional_estimates_one_player
 #' @title Scrape basketball-reference.com player play by play table for positional estimates
 #' @description Input is a bbref player id. Output is a data frame with the scraped 
 #'                bbref play by play table including the proportion of minutes at each position
@@ -29,10 +29,10 @@ players = data.frame(
 #'        
 #' @examples 
 #' # Scrape for Giannis Antetokounmpo
-#' bbref_positional_estimates('antetgi01')
+#' bbref_positional_estimates_one_player('antetgi01')
 #' # Scrape for Nik Stauskas 
-#' bbref_positional_estimates('stausni01')
-bbref_positional_estimates = function(bbref_id) {
+#' bbref_positional_estimates_one_player('stausni01')
+bbref_positional_estimates_one_player = function(bbref_id) {
   # Create url
   url = paste0("https://www.basketball-reference.com/players/", substring(bbref_id, 1, 1), "/", bbref_id ,".html")
   # Read in page
@@ -63,7 +63,7 @@ bbref_positional_estimates = function(bbref_id) {
   # Change season to have end of year number
   pos_table = pos_table %>% 
     dplyr::mutate(season_end = substring(season, nchar(season)-1, nchar(season)),
-           season_start = substring(season, 1, 1)) %>%
+                  season_start = substring(season, 1, 1)) %>%
     dplyr::mutate(season = ifelse(season_start == 2, paste0("20", season_end), paste0("19", season_end))) %>%
     dplyr::select(-season_end, -season_start)
   # Add experience years
@@ -72,15 +72,15 @@ bbref_positional_estimates = function(bbref_id) {
   pos_table = pos_table %>%
     # Remove %'s and divide by 100
     dplyr::mutate_at(dplyr::vars(dplyr::contains("prop")), 
-                dplyr::funs(
-                  as.numeric(stringr::str_remove(., "%")) / 100 
-                )
-             ) %>%
+                     dplyr::funs(
+                       as.numeric(stringr::str_remove(., "%")) / 100 
+                     )
+    ) %>%
     # NA's as 0
     dplyr::mutate_at(dplyr::vars(dplyr::contains("prop")),
-                dplyr::funs(
-                  ifelse(is.na(.), 0, .)
-                ))
+                     dplyr::funs(
+                       ifelse(is.na(.), 0, .)
+                     ))
   # Convert column types
   pos_table = suppressMessages(readr::type_convert(pos_table))
   
@@ -92,10 +92,10 @@ bbref_positional_estimates = function(bbref_id) {
                      )          
     ) %>%
     dplyr::rename_at(dplyr::vars(dplyr::ends_with("_minutes")),
-            dplyr::funs(
-              paste0("minutes_", stringr::str_remove(stringr::str_remove(., "_minutes"), "prop_"))
-            )           
-          )
+                     dplyr::funs(
+                       paste0("minutes_", stringr::str_remove(stringr::str_remove(., "_minutes"), "prop_"))
+                     )           
+    )
   
   # Add the bbref player id and reorder columns
   pos_table = pos_table %>% dplyr::mutate(bbref_id = bbref_id) %>%
@@ -106,17 +106,28 @@ bbref_positional_estimates = function(bbref_id) {
   return(pos_table)
 }
 
-library(foreach)
-library(doParallel)
-cores = detectCores()
-cl = makeCluster(cores[1]- 1)
-registerDoParallel(cl)
-
-player_df = foreach(player = players$bbref_id, .combine=rbind) %dopar% {
-  `%>%` = dplyr::`%>%`
-  bbref_positional_estimates(player)
+bbref_positional_estimates = function(bbref_ids, parallel = TRUE) {
+  `%dopar%` = foreach::`%dopar%`
+  # Set up parallel running
+  if (parallel) {
+    cores = parallel::detectCores()
+    cl = parallel::makeCluster(cores[1] - 1)
+    doParallel::registerDoParallel(cl)
+  }
+  # Run over each player
+  player_df = foreach::foreach(bbref_id = bbref_ids, .combine=rbind, .export = 'bbref_positional_estimates_one_player') %dopar% {
+    `%>%` = dplyr::`%>%`
+    bbref_positional_estimates_one_player(bbref_id)
+  }
+  # Stop parralel
+  if (parallel) {
+    parallel::stopCluster(cl)
+  }
+  
+  return(player_df) 
 }
-stopCluster(cl)
 
-#write.csv(player_df, 'player_position_estimates.csv',
-#          row.names = FALSE)
+positions_df = bbref_positional_estimates(bbref_players$bbref_id)
+
+write.csv(positions_df, 'data/bbref_player_data/player_position_estimates.csv',
+          row.names = FALSE)
