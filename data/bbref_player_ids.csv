@@ -29,7 +29,7 @@ Alando Tucker,t/tuckeal02,tuckeal02,alando-tucker-1,2008,2010
 Alec Burks,b/burksal01,burksal01,alec-burks-1,2012,2019
 Alec Peters,p/peteral01,peteral01,alec-peters-1,2018,2018
 Aleksandar Radojevic,r/radojal01,radojal01,,2005,2005
-Alex Abrines,a/abrinal01,abrinal01,alex-abrines-1,2017,2019
+Alex Abrines,a/abrinal01,abrinal01,,2017,2019
 Alex Acker,a/ackeral01,ackeral01,alex-acker-1,2006,2009
 Alex Caruso,c/carusal01,carusal01,alex-caruso-1,2018,2019
 Alex Garcia,g/garcial01,garcial01,,2005,2005
@@ -76,7 +76,7 @@ Andrew DeClercq,d/declean01,declean01,andrew-declercq-1,2005,2005
 Andrew Goudelock,g/goudean01,goudean01,andrew-goudelock-1,2012,2016
 Andrew Harrison,h/harrian01,harrian01,andrew-harrison-1,2017,2019
 Andrew Nicholson,n/nichoan01,nichoan01,andrew-nicholson-1,2013,2017
-Andrew White,w/whitean01,whitean01,andrew-white-1,2018,2018
+Andrew White,w/whitean01,whitean01,andrew-whiteiii-1,2018,2018
 Andrew Wiggins,w/wiggian01,wiggian01,andrew-wiggins-1,2015,2019
 Andris Biedrins,b/biedran01,biedran01,,2005,2014
 Andy Rautins,r/rautian01,rautian01,andy-rautins-1,2011,2011
@@ -318,7 +318,7 @@ Damien Wilkins,w/wilkida02,wilkida02,damien-wilkins-1,2005,2018
 Damion James,j/jamesda01,jamesda01,damion-james-1,2011,2014
 Damion Lee,l/leeda03,leeda03,damion-lee-1,2018,2019
 Damir Markota,m/markoda01,markoda01,,2007,2007
-Damjan Rudez,r/rudezda01,rudezda01,damjan-rudez-1,2015,2017
+Damjan Rudez,r/rudezda01,rudezda01,,2015,2017
 Damon Jones,j/jonesda01,jonesda01,damon-jones-1,2005,2009
 Damon Stoudamire,s/stoudda01,stoudda01,damon-stoudamire-1,2005,2008
 Damone Brown,b/brownda02,brownda02,damone-brown-1,2005,2005
@@ -480,7 +480,7 @@ Eddie Gill,g/gilled01,gilled01,eddie-gill-1,2005,2009
 Eddie Griffin,g/griffed01,griffed01,eddie-griffin-1,2005,2007
 Eddie House,h/houseed01,houseed01,eddie-house-1,2005,2011
 Eddie Jones,j/jonesed02,jonesed02,eddie-jones-1,2005,2008
-Eddy Curry,c/curryed01,curryed01,eddy-curry-1,2005,2013
+Eddy Curry,c/curryed01,curryed01,,2005,2013
 Edmond Sumner,s/sumneed01,sumneed01,edmond-sumner-1,2018,2019
 Eduardo Najera,n/najered01,najered01,eduardo-najera-1,2005,2012
 Edwin Ubiles,u/ubileed01,ubileed01,edwin-ubiles-1,2012,2012
@@ -542,8 +542,8 @@ Gary Clark,c/clarkga01,clarkga01,gary-clark-2,2019,2019
 Gary Forbes,f/forbega01,forbega01,gary-forbes-1,2011,2012
 Gary Harris,h/harriga01,harriga01,gary-harris-1,2015,2019
 Gary Neal,n/nealga01,nealga01,gary-neal-1,2011,2017
-Gary Payton,p/paytoga01,paytoga01,gary-payton-2,2005,2007
-Gary Payton,p/paytoga02,paytoga02,gary-payton-1,2017,2019
+Gary Payton,p/paytoga01,paytoga01,gary-payton-1,2005,2007
+Gary Payton,p/paytoga02,paytoga02,gary-payton-2,2017,2019
 Gary Trent,t/trentga02,trentga02,gary-trentjr-1,2019,2019
 Geno Carlisle,c/carlige01,carlige01,geno-carlisle-1,2005,2005
 George Hill,h/hillge01,hillge01,george-hill-1,2009,2019
@@ -864,7 +864,7 @@ Karl-Anthony Towns,t/townska01,townska01,karl-anthony-towns-1,2016,2019
 Kasib Powell,p/powelka01,powelka01,kasib-powell-1,2008,2008
 Kawhi Leonard,l/leonaka01,leonaka01,kawhi-leonard-1,2012,2019
 Kay Felder,f/feldeka01,feldeka01,kahlil-felder-1,2017,2018
-Kedrick Brown,b/brownke01,brownke01,kedrick-brown-1,2005,2005
+Kedrick Brown,b/brownke01,brownke01,,2005,2005
 Keita Bates-Diop,b/bateske01,bateske01,keita-bates-diop-1,2019,2019
 Keith Appling,a/applike01,applike01,keith-appling-1,2016,2016
 Keith Benson,b/bensoke02,bensoke02,keith-benson-1,2012,2012
@@ -899,7 +899,7 @@ Kevin Martin,m/martike02,martike02,kevin-martin-1,2005,2016
 Kevin Murphy,m/murphke01,murphke01,kevin-murphy-1,2013,2013
 Kevin Ollie,o/ollieke01,ollieke01,kevin-ollie-1,2005,2010
 Kevin Seraphin,s/serapke01,serapke01,,2011,2017
-Kevin Willis,w/willike02,willike02,kevin-willis-1,2005,2007
+Kevin Willis,w/willike02,willike02,,2005,2007
 Kevinn Pinkney,p/pinknke01,pinknke01,kevinn-pinkney-1,2007,2007
 Kevon Looney,l/looneke01,looneke01,kevon-looney-1,2016,2019
 Keyon Dooling,d/doolike01,doolike01,keyon-dooling-1,2005,2013
@@ -1072,7 +1072,7 @@ Maurice Evans,e/evansma01,evansma01,maurice-evans-1,2005,2012
 Maurice Harkless,h/harklma01,harklma01,maurice-harkless-1,2013,2019
 Maurice Ndour,n/ndourma01,ndourma01,maurice-ndour-1,2017,2017
 Maurice Taylor,t/tayloma01,tayloma01,maurice-taylor-1,2005,2007
-Maxi Kleber,k/klebima01,klebima01,maxi-kleber-1,2018,2019
+Maxi Kleber,k/klebima01,klebima01,,2018,2019
 Mehmet Okur,o/okurme01,okurme01,,2005,2012
 Melvin Ely,e/elyme01,elyme01,melvin-ely-1,2005,2014
 Melvin Frazier,f/frazime01,frazime01,melvin-frazier-1,2019,2019
@@ -1281,7 +1281,7 @@ Robert Covington,c/covinro01,covinro01,robert-covington-1,2014,2019
 Robert Hite,h/hitero01,hitero01,robert-hite-1,2007,2007
 Robert Horry,h/horryro01,horryro01,robert-horry-1,2005,2008
 Robert Sacre,s/sacrero01,sacrero01,robert-sacre-1,2013,2016
-Robert Swift,s/swiftro01,swiftro01,robert-swift-1,2005,2009
+Robert Swift,s/swiftro01,swiftro01,,2005,2009
 Robert Traylor,t/traylro01,traylro01,robert-traylor-1,2005,2005
 Robert Whaley,w/whalero01,whalero01,robert-whaley-1,2006,2006
 Robert Williams,w/williro04,williro04,robert-williams-3,2019,2019
@@ -1303,7 +1303,7 @@ Roko Ukic,u/ukicro01,ukicro01,,2009,2010
 Ron Baker,b/bakerro01,bakerro01,ron-baker-1,2017,2019
 Ron Mercer,m/mercero01,mercero01,ron-mercer-1,2005,2005
 Ronald Dupree,d/duprero01,duprero01,ronald-dupree-1,2005,2011
-Ronald Murray,m/murraro01,murraro01,ronald-murray-1,2005,2010
+Ronald Murray,m/murraro01,murraro01,,2005,2010
 Rondae Hollis-Jefferson,h/holliro01,holliro01,rondae-hollis-jefferson-1,2016,2019
 Ronnie Brewer,b/brewero02,brewero02,ronnie-brewer-1,2007,2014
 Ronnie Price,p/pricero01,pricero01,ronnie-price-1,2006,2017
@@ -1439,7 +1439,7 @@ Terrence Williams,w/willite01,willite01,terrence-williams-1,2010,2013
 Terry Rozier,r/roziete01,roziete01,terry-rozier-1,2016,2019
 Thabo Sefolosha,s/sefolth01,sefolth01,,2007,2019
 Thaddeus Young,y/youngth01,youngth01,thaddeus-young-1,2008,2019
-Thanasis Antetokounmpo,a/antetth01,antetth01,thanasis-antetokounmpo-1,2016,2016
+Thanasis Antetokounmpo,a/antetth01,antetth01,,2016,2016
 Theo Pinson,p/pinsoth01,pinsoth01,theo-pinson-1,2019,2019
 Theo Ratliff,r/ratlith01,ratlith01,theo-ratliff-1,2005,2011
 Theron Smith,s/smithth01,smithth01,theron-smith-1,2005,2005
