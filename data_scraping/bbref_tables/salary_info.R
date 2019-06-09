@@ -25,25 +25,22 @@ bbref_get_salary_one_player = function(bbref_link) {
       rvest::html_table()
   },
   error = function(e) {
-    NULL
+    data.frame()
   })
   
-  if (is.null(salary_table)) {
-    return(
-      data.frame()
-    )
+  if (nrow(salary_table) > 0) {
+    salary_table = salary_table[-nrow(salary_table),]
+    # Sum over a season. Players who played for multiple teams just get summed together.
+    salary_table = salary_table %>% dplyr::group_by(Season) %>%
+      dplyr::summarise(Salary = sum(as.numeric(stringr::str_remove_all(Salary, '\\$|,'))))
+    # Clean season data
+    salary_table = salary_table %>% 
+      dplyr::mutate(Season = ifelse(substring(Season, 1, 2) == 19 & substring(Season, 6, 7) == '00',
+                    2000,
+                    as.numeric(paste0(substring(Season, 1, 2), substring(Season, 6, 7))))) %>%
+      dplyr::select(season = Season, salary = Salary)
+    salary_table$contract_type = 'past'
   }
-  salary_table = salary_table[-nrow(salary_table),]
-  # Sum over a season. Players who played for multiple teams just get summed together.
-  salary_table = salary_table %>% dplyr::group_by(Season) %>%
-    dplyr::summarise(Salary = sum(as.numeric(stringr::str_remove_all(Salary, '\\$|,'))))
-  # Clean season data
-  salary_table = salary_table %>% 
-    dplyr::mutate(Season = ifelse(substring(Season, 1, 2) == 19 & substring(Season, 6, 7) == '00',
-                  2000,
-                  as.numeric(paste0(substring(Season, 1, 2), substring(Season, 6, 7))))) %>%
-    dplyr::select(season = Season, salary = Salary)
-  salary_table$contract_type = 'past'
   # Now get future contracts
   table_ids = 
     page %>% rvest::html_nodes(xpath = '//comment()') %>% # select comments
@@ -54,8 +51,18 @@ bbref_get_salary_one_player = function(bbref_link) {
       rvest::html_attr('id') # get the id's
   table_ids = table_ids[stringr::str_which(table_ids, "contracts_[a-z]{3}")]
   if (length(table_ids) == 0) {
-    return(cbind(bbref_id = stringr::str_split(bbref_link, '\\/', simplify = TRUE)[2],
-                 salary_table))
+    if (nrow(salary_table) == 0) {
+      return(data.frame(
+        bbref_id = stringr::str_split(bbref_link, '\\/', simplify = TRUE)[2],
+        season = NA,
+        contract_type = NA,
+        salary = NA
+      ))
+    }
+    else {
+      return(cbind(bbref_id = stringr::str_split(bbref_link, '\\/', simplify = TRUE)[2],
+                   salary_table))
+    }
   }
   contract_table_all = data.frame()
   for (id in table_ids) {
@@ -104,15 +111,24 @@ bbref_get_salary_one_player = function(bbref_link) {
   }
   # Check out "w/willial03"
   if (nrow(contract_table_all) == 0) {
-    return(cbind(bbref_id = stringr::str_split(bbref_link, '\\/', simplify = TRUE)[2],
-                 salary_table))
+    if (nrow(salary_table) == 0) {
+      return(data.frame(
+        bbref_id = stringr::str_split(bbref_link, '\\/', simplify = TRUE)[2],
+        season = NA,
+        contract_type = NA,
+        salary = NA
+      ))
+    }
+    else {
+      return(cbind(bbref_id = stringr::str_split(bbref_link, '\\/', simplify = TRUE)[2],
+                   salary_table))
+    }
   }
   contract_table_all = contract_table_all %>%
     dplyr::group_by(season, contract_type) %>%
     dplyr::summarise(salary = sum(salary)) %>% dplyr::ungroup()
   # Join past and future data
   salary_data = rbind(salary_table, contract_table_all)
-
   salary_data = cbind(bbref_id = stringr::str_split(bbref_link, '\\/', simplify = TRUE)[2],
                       salary_data)
   
@@ -167,6 +183,8 @@ bbref_salary_history= function() {
   
 }
 
+bbref_players = read.csv('~/Documents/nba_positional_scarcity/data/player_table.csv',
+                         stringsAsFactors = FALSE)
 salary_info = bbref_get_salary(bbref_players$bbref_link, TRUE)
 salary_cap = bbref_salary_history()
 
