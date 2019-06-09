@@ -45,11 +45,30 @@ get_rpm_numbers = function(year, page_number) {
   
   colnames(table) = cols
   table = table[-1,]
+  # Get ESPN links
+  links = rvest::html_nodes(body, xpath = '//*[@id="my-players-table"]/div/div[2]/table') %>% 
+    rvest::html_nodes('a') %>% rvest::html_attr('href')
+  idx = stringr::str_detect(links, "id/[0-9]+/.+")
+  links = links[idx]
+  links = stringr::str_extract(links, "id/[0-9]+/.+") %>%
+    stringr::str_remove('id/')
+  if (length(links) == nrow(table)) {
+    table$espn_link = links
+  }
+  else {
+    names =   links = rvest::html_nodes(body, xpath = '//*[@id="my-players-table"]/div/div[2]/table') %>% 
+      rvest::html_nodes('a') %>% rvest::html_text()
+    names = names[idx]
+    id_df = data.frame(name = names, espn_link = links)
+    table = dplyr::left_join(table, id_df, by = 'name')
+  }
+
   # In case there was a player that played in multiple teams
-  table = table %>% tidyr::separate(name, into = c("name", "pos"), sep = ', ') %>%
+  table = table %>% tidyr::separate(player_name, into = c("name", "pos"), sep = ', ') %>%
     tidyr::separate_rows(team, sep = '/')
   
   table = table %>% dplyr::mutate(season = year)
+  
   return(table)
 }
 
@@ -63,14 +82,5 @@ for (year in 2014:2019) {
   rpm = rbind(rpm, rpm_temp)
 }
 
-# * Join ESPN ID's ----
-espn_player_ids = read.csv("~/Documents/nba_positional_scarcity/data/espn_player_id.csv",
-                           stringsAsFactors = FALSE)
-rpm2 = dplyr::left_join(rpm, espn_player_ids, by = "player_name")
-# Filter out some duplicates.
-# The specific espn number is a wild Tony Mitchell case.
-rpm2 = rpm2 %>% dplyr::filter(season >= first_season, season <= last_season, espn_number != 2489010) %>%
-  dplyr::select(player_name, pos, team, gp, mpg, orpm, drpm, rpm, wins, season, espn_link, espn_number, espn_id)
-
 # * Save data ----
-write.csv(rpm, file = "data/espn_nba_rpm.csv")
+write.csv(rpm, file = "~/Documents/nba_positional_scarcity/data/espn_nba_rpm.csv", row.names = FALSE)
