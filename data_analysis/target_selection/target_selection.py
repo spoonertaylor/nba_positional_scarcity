@@ -43,6 +43,35 @@ def pad_corr_series(corr_list):
       too_long_start = (len(corr_list) - 10) // 2
     return np.array(corr_list[too_long_start:too_long_start+9])
 
+def plot_normalized_metric(metric):
+    fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(18, 10), sharex=True, sharey=True)
+    metric_list = ['NET_RTG', 'BPM', 'VORP', 'MP', 'RPM', 'WINS', 'SALARY', 'SALARY_PROP_CAP']
+    metric_list.remove(metric)
+    density_hists = [np.sum(np.vstack(tuple(pad_corr_series(x) for x in df_norm[str(metric + '_' + metric2)])), axis=0) for metric2 in metric_list]
+    density_bins = np.arange(-4, 5)
+    axs[0, 0].bar(density_bins, density_hists[0])
+    axs[0, 1].bar(density_bins, density_hists[1])
+    axs[0, 2].bar(density_bins, density_hists[2])
+    axs[1, 0].bar(density_bins, density_hists[3])
+    axs[1, 1].bar(density_bins, density_hists[4])
+    axs[1, 2].bar(density_bins, density_hists[5])
+    axs[2, 1].bar(density_bins, density_hists[6])
+    axs[1, 0].set_ylabel('Density')
+    axs[2, 1].set_xlabel('Season Lag')
+    axs[0, 0].set_title('{0} vs. {1}'.format(metric, metric_list[0]), fontsize=12)
+    axs[0, 1].set_title('{0} vs. {1}'.format(metric, metric_list[1]), fontsize=12)
+    axs[0, 2].set_title('{0} vs. {1}'.format(metric, metric_list[2]), fontsize=12)
+    axs[1, 0].set_title('{0} vs. {1}'.format(metric, metric_list[3]), fontsize=12)
+    axs[1, 1].set_title('{0} vs. {1}'.format(metric, metric_list[4]), fontsize=12)
+    axs[1, 2].set_title('{0} vs. {1}'.format(metric, metric_list[5]), fontsize=12)
+    axs[2, 1].set_title('{0} vs. {1}'.format(metric, metric_list[6]), fontsize=12)
+    axs[2, 0].grid(False)
+    axs[2, 2].grid(False)
+    plt.suptitle('{0} Cross Correlations'.format(metric), fontsize=20)
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.85)
+    plt.show()
+
 if __name__=='__main__':
     # Read in data sources
     player_table = pd.read_csv('../../data/player_table.csv')
@@ -51,11 +80,15 @@ if __name__=='__main__':
     bbref_player_df = pd.read_csv('../../data/bbref_player_data/bbref_player_data.csv')
 
     # Convert season from yyyy to yyyy-yyyy to join on
-    salary_df['season'] = salary_df.apply(lambda row: str(row['season'] - 1) +  '-' +  str(row['season']), axis=1)
+    salary_df = salary_df[salary_df['season'].notnull()]
+    salary_df['season'] = salary_df.apply(lambda row: str(int(row['season'] - 1)) +  '-' +  str(int(row['season'])), axis=1)
     espn_nba_rpm['season'] = espn_nba_rpm.apply(lambda row: str(row['season'] - 1) +  '-' +  str(row['season']), axis=1)
 
+    # Aggregatre ESPN metrics to season level to avoid problem joining traded players
+    espn_nba_rpm = espn_nba_rpm.groupby(['name', 'pos', 'espn_link', 'season']).mean().reset_index()
+
     # Join dataframes
-    player_data = (pd.merge(bbref_player_df, player_table, how='left', left_on='PLAYER', right_on='player_name')
+    player_data = (pd.merge(bbref_player_df, player_table, how='left', left_on='bbref_id', right_on='bbref_id')
                             .merge(salary_df, how='left', left_on=['bbref_id', 'SEASON'], right_on=['bbref_id', 'season'])
                             .merge(espn_nba_rpm, how='left', left_on=['espn_link', 'SEASON'], right_on=['espn_link', 'season'])
                             [['bbref_id', 'espn_link', 'PLAYER', 'AGE', 'MP', 'SEASON', 'TEAM', 'POSITION',
@@ -101,7 +134,7 @@ if __name__=='__main__':
             if metric1 != metric2:
                 corr_df[str(metric1 + '_' + metric2 + '_COUNT')] = df_non_norm[str(metric1 + '_' + metric2)].value_counts().reset_index().sort_values(by='index', ascending=False)[str(metric1 + '_' + metric2)]
 
-    # Plot Histogram of Non-Normalized Lags (Net Rating vs. VORP vs. BPM example)
+    # Example Plot Histogram of Non-Normalized Lags (Net Rating vs. VORP vs. BPM)
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(18, 5), sharex=True, sharey=True)
     axs[0].bar(corr_df['SEASON_LAG'], corr_df['NET_RTG_BPM_COUNT'])
     axs[1].bar(corr_df['SEASON_LAG'], corr_df['NET_RTG_VORP_COUNT'])
@@ -125,7 +158,7 @@ if __name__=='__main__':
                 df_norm[str(metric1 + '_' + metric2)] = df_norm.apply(lambda row: norm_cross_correlation(row[metric1], row[metric2]), axis=1)
 
 
-    # Plot Histogram of Normalized Lags (Net Rating vs. VORP vs. BPM example)
+    # Example Plot Histogram of Normalized Lags (Net Rating vs. VORP vs. BPM)
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(18, 5), sharex=True, sharey=True)
     density_hist1 = np.sum(np.vstack(tuple(pad_corr_series(x) for x in df_norm['NET_RTG_BPM'])), axis=0)
     density_hist2 = np.sum(np.vstack(tuple(pad_corr_series(x) for x in df_norm['NET_RTG_VORP'])), axis=0)
@@ -143,28 +176,4 @@ if __name__=='__main__':
     plt.show()
 
     # Plot all cross-correlations for individual metric
-    fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(18, 10), sharex=True, sharey=True)
-    density_hists = [np.sum(np.vstack(tuple(pad_corr_series(x) for x in df_norm[str('NET_RTG' + '_' + metric)])), axis=0) for metric in ['BPM', 'VORP', 'MP', 'RPM', 'WINS', 'SALARY', 'SALARY_PROP_CAP']]
-    density_bins = np.arange(-4, 5)
-    axs[0, 0].bar(density_bins, density_hists[0])
-    axs[0, 1].bar(density_bins, density_hists[1])
-    axs[0, 2].bar(density_bins, density_hists[2])
-    axs[1, 0].bar(density_bins, density_hists[3])
-    axs[1, 1].bar(density_bins, density_hists[4])
-    axs[1, 2].bar(density_bins, density_hists[5])
-    axs[2, 1].bar(density_bins, density_hists[6])
-    axs[1, 0].set_ylabel('Density')
-    axs[2, 1].set_xlabel('Season Lag')
-    axs[0, 0].set_title('Net Rating vs. BPM', fontsize=12)
-    axs[0, 1].set_title('Net Rating vs. VORP', fontsize=12)
-    axs[0, 2].set_title('Net Rating vs. MP', fontsize=12)
-    axs[1, 0].set_title('Net Rating vs. RPM', fontsize=12)
-    axs[1, 1].set_title('Net Rating vs. Wins', fontsize=12)
-    axs[1, 2].set_title('Net Rating vs. Salary', fontsize=12)
-    axs[2, 1].set_title('Net Rating vs. Salary Prop Cap', fontsize=12)
-    axs[2, 0].grid(False)
-    axs[2, 2].grid(False)
-    plt.suptitle('Net Rating Cross Correlations', fontsize=20)
-    plt.tight_layout()
-    plt.subplots_adjust(top=0.85)
-    plt.show()
+    plot_normalized_metric('VORP')
