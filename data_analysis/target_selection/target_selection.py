@@ -88,7 +88,7 @@ if __name__=='__main__':
     espn_nba_rpm = espn_nba_rpm.groupby(['name', 'pos', 'espn_link', 'season']).mean().reset_index()
 
     # Join dataframes
-    player_data = (pd.merge(bbref_player_df, player_table, how='left', left_on='bbref_id', right_on='bbref_id')
+    player_data = (pd.merge(bbref_player_df, player_table, how='left', left_on='BBREF_ID', right_on='bbref_id')
                             .merge(salary_df, how='left', left_on=['bbref_id', 'SEASON'], right_on=['bbref_id', 'season'])
                             .merge(espn_nba_rpm, how='left', left_on=['espn_link', 'SEASON'], right_on=['espn_link', 'season'])
                             [['bbref_id', 'espn_link', 'PLAYER', 'AGE', 'MP', 'SEASON', 'TEAM', 'POSITION',
