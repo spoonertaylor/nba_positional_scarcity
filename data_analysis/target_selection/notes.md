@@ -7,7 +7,7 @@ After examining the resulting distributions of all pairwise metric comparisons, 
 
 The following documentation describes our data sources, methodology, and additional findings which will later influence our player projection model.
 
-![BPM Normalized Cross Correlation](/Plots/Full_Sample/BPM_Cross_Correlation.png)
+![BPM Normalized Cross Correlation](Plots/Full_Sample/BPM_Cross_Correlation.png)
 
 ---
 #### Methodology
@@ -23,7 +23,7 @@ MP vs. RPM, BPM, and VORP Example.
 
 When run in a pairwise-fashion between all metrics we can see whether a metric in question leads or lags all other metrics. Using Minutes Played (MP) as an example below we see that MP lags all major box-score metrics indicating that a player's future minute total lags behind his current on-court performance. This makes intuitive sense as players who play well are subsequently rewarded with more minutes the following season and those who under-perform see their minutes played decrease.
 
-![MP Normalized Cross Correlation](/Plots/Full_Sample/MP_Cross_Correlation.png)
+![MP Normalized Cross Correlation](Plots/Full_Sample/MP_Cross_Correlation.png)
 
 One question we had during this process was if these findings held true across smaller subsets of the data. We ran this same analysis using only players that met the NBA-defined starter criteria of 2,000+ MP in addition to a self-defined fringe-player criteria of 500+ MP and observed the same results. Similarly, we were curious if the findings would hold true if the data was limited to only those seasons since 2013 when RPM was first introduced and in fact we did see similar results but less drastic. It appears that RPM and BPM are quite similar, which may provide an explanation of why 538's model uses a blend of the two.
 
@@ -31,9 +31,9 @@ One question we had during this process was if these findings held true across s
 #### Additional Findings
 We were able to show that MP lags the majority of major box-score metrics. We were also curious if salary payouts would do the same. This might answer the question of if players are paid for future or historical performance. Using this same process we looked at Salary (raw dollar amount) and Salary Cap Prop (the proportion of the league salary cap) each of which told the same story. Salary is a leading indicator of most box-score metrics, with the exception of BPM, in addition to MP. This suggests that teams on average are correctly paying players for future performance.
 
-![Salary Normalized Cross Correlation](/Plots/Full_Sample/Salary_Cross_Correlation.png)
+![Salary Normalized Cross Correlation](Plots/Full_Sample/Salary_Cross_Correlation.png)
 
-![Salary Cap Prop Normalized Cross Correlation](/Plots/Full_Sample/Salary_Prop_Cap_Cross_Correlation.png)
+![Salary Cap Prop Normalized Cross Correlation](Plots/Full_Sample/Salary_Prop_Cap_Cross_Correlation.png)
 
 ---
 #### Data
